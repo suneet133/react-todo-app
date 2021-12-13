@@ -6,6 +6,7 @@ import TodoList from './TodoList';
 import { func } from 'prop-types';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { TodosContext } from './context/TodosContext';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
@@ -54,7 +55,16 @@ function App() {
               <TodoForm addTodo={addTodo} />
               <hr></hr>
               <div className="content">
-                {todos.length > 0 ? <TodoList /> : <NoTodo />}
+                <SwitchTransition mode="out-in">
+                  <CSSTransition
+                    key={todos.length > 0}
+                    timeout={300}
+                    classNames="slide-vertical"
+                    unmountOnExit
+                  >
+                    <>{todos.length > 0 ? <TodoList /> : <NoTodo />}</>
+                  </CSSTransition>
+                </SwitchTransition>
               </div>
             </div>
           </div>

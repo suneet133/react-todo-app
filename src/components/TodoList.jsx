@@ -6,6 +6,7 @@ import ClearCompletedTodos from './TodoListComponents/ClearCompletedTodos';
 import FilterTodos from './TodoListComponents/FilterTodos';
 import useToggle from '../hooks/useToggle';
 import { TodosContext } from './context/TodosContext';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 function TodoList() {
   const { filterTodos, todos, setTodos } = useContext(TodosContext);
@@ -69,57 +70,63 @@ function TodoList() {
 
   return (
     <div>
-      <ul style={{ listStyle: 'none' }}>
+      <TransitionGroup component="ul" className="todo-list">
         {filterTodos().map((todo, index) => (
-          <li key={todo.id}>
-            <div className="columns">
-              <div className="column is-1">
-                <input
-                  type="checkbox"
-                  onChange={() => completeTodo(todo.id)}
-                  checked={todo.isComplete ? true : false}
-                />
-              </div>
-              <div className="column">
-                {!todo.isEditing && (
-                  <span
-                    onDoubleClick={() => enableEditing(todo.id)}
-                    className={`subtitle is-5 ${
-                      todo.isComplete ? 'line-through' : ''
-                    }`}
-                  >
-                    {todo.title}
-                  </span>
-                )}
-                {todo.isEditing && (
+          <CSSTransition
+            key={todo.id}
+            classNames="slide-horizontal"
+            timeout={300}
+          >
+            <li>
+              <div className="columns">
+                <div className="column is-1">
                   <input
-                    onBlur={event => updateTodos(event, todo.id)}
-                    onKeyDown={event => {
-                      if (event.key === 'Enter') {
-                        updateTodos(event, todo.id);
-                      } else if (event.key === 'Escape') {
-                        cancelEdit(todo.id);
-                      }
-                    }}
-                    className="input"
-                    type="text"
-                    defaultValue={todo.title}
-                    autoFocus
+                    type="checkbox"
+                    onChange={() => completeTodo(todo.id)}
+                    checked={todo.isComplete ? true : false}
                   />
-                )}
+                </div>
+                <div className="column">
+                  {!todo.isEditing && (
+                    <span
+                      onDoubleClick={() => enableEditing(todo.id)}
+                      className={`subtitle is-5 ${
+                        todo.isComplete ? 'line-through' : ''
+                      }`}
+                    >
+                      {todo.title}
+                    </span>
+                  )}
+                  {todo.isEditing && (
+                    <input
+                      onBlur={event => updateTodos(event, todo.id)}
+                      onKeyDown={event => {
+                        if (event.key === 'Enter') {
+                          updateTodos(event, todo.id);
+                        } else if (event.key === 'Escape') {
+                          cancelEdit(todo.id);
+                        }
+                      }}
+                      className="input"
+                      type="text"
+                      defaultValue={todo.title}
+                      autoFocus
+                    />
+                  )}
+                </div>
+                <div className="column is-1">
+                  <span
+                    onClick={() => deleteTodo(todo.id)}
+                    className="icon is-medium"
+                  >
+                    <i className="fas fa-times"></i>
+                  </span>
+                </div>
               </div>
-              <div className="column is-1">
-                <span
-                  onClick={() => deleteTodo(todo.id)}
-                  className="icon is-medium"
-                >
-                  <i className="fas fa-times"></i>
-                </span>
-              </div>
-            </div>
-          </li>
+            </li>
+          </CSSTransition>
         ))}
-      </ul>
+      </TransitionGroup>
       <hr />
       <div className="field is-grouped is-grouped-right">
         <p className="control">
@@ -131,7 +138,12 @@ function TodoList() {
           </button>
         </p>
       </div>
-      {footerVisible && (
+      <CSSTransition
+        in={footerVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
         <>
           <div className="columns is-vcentered">
             <div className="column" style={{ marginLeft: '2rem' }}>
@@ -155,7 +167,7 @@ function TodoList() {
             </div>
           </div>
         </>
-      )}
+      </CSSTransition>
     </div>
   );
 }
