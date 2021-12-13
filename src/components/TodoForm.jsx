@@ -1,16 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes, { func } from 'prop-types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-TodoForm.propTypes = {
-  addTodo: PropTypes.func.isRequired,
-};
+import { TodosContext } from './context/TodosContext';
 
-function TodoForm(props) {
+function TodoForm() {
   const [todoInput, setTodoInput] = useState('');
   const todoInputEl = useRef(null);
 
+  const { todos, setTodos, idForTodo, setIdForTodo } = useContext(TodosContext);
+
   function handleInput(event) {
     setTodoInput(event.target.value);
+  }
+
+  function getUniqueId() {
+    return new Date().getTime();
   }
 
   function handleFormSubmit(event) {
@@ -20,7 +23,17 @@ function TodoForm(props) {
       return;
     }
 
-    props.addTodo(todoInput);
+    // Add code here from context
+    setTodos([
+      ...todos,
+      {
+        id: idForTodo,
+        title: todoInput,
+        isComplete: false,
+      },
+    ]);
+
+    setIdForTodo(getUniqueId());
 
     setTodoInput('');
   }
