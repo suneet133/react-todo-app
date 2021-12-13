@@ -4,6 +4,7 @@ import TodoItemsRemaining from './TodoListComponents/TodoItemsRemaining';
 import CheckAllTodos from './TodoListComponents/CheckAllTodos';
 import ClearCompletedTodos from './TodoListComponents/ClearCompletedTodos';
 import FilterTodos from './TodoListComponents/FilterTodos';
+import useToggle from '../hooks/useToggle';
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
@@ -20,6 +21,7 @@ TodoList.propTypes = {
 
 function TodoList(props) {
   const [filter, setFilter] = useState('All');
+  const [footerVisible, setFooterVisible] = useToggle(true);
 
   return (
     <div>
@@ -75,34 +77,48 @@ function TodoList(props) {
         ))}
       </ul>
       <hr />
-      <div className="columns is-vcentered">
-        <div className="column">
-          <CheckAllTodos
-            remaining={props.remaining}
-            checkAll={props.checkAll}
-          />
-        </div>
-        <div className="column">
-          <span className="is-pulled-right">
-            <TodoItemsRemaining remaining={props.remaining} />
-          </span>
-        </div>
+      <div className="field is-grouped is-grouped-right">
+        <p className="control">
+          <button
+            className="button is-small is-pulled-right"
+            onClick={setFooterVisible}
+          >
+            {footerVisible ? 'hide' : 'show'}
+          </button>
+        </p>
       </div>
-      <hr />
-      <div className="columns is-vcentered">
-        <div className="column">
-          <FilterTodos
-            filter={filter}
-            filterTodos={props.filterTodos}
-            setFilter={setFilter}
-          />
-        </div>
-        <div className="column">
-          <span className="is-pulled-right">
-            <ClearCompletedTodos clearCompleted={props.clearCompleted} />
-          </span>
-        </div>
-      </div>
+      {footerVisible && (
+        <>
+          <div className="columns is-vcentered">
+            <div className="column">
+              <CheckAllTodos
+                remaining={props.remaining}
+                checkAll={props.checkAll}
+              />
+            </div>
+            <div className="column">
+              <span className="is-pulled-right">
+                <TodoItemsRemaining remaining={props.remaining} />
+              </span>
+            </div>
+          </div>
+          <hr />
+          <div className="columns is-vcentered">
+            <div className="column">
+              <FilterTodos
+                filter={filter}
+                filterTodos={props.filterTodos}
+                setFilter={setFilter}
+              />
+            </div>
+            <div className="column">
+              <span className="is-pulled-right">
+                <ClearCompletedTodos clearCompleted={props.clearCompleted} />
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -4,9 +4,11 @@ import NoTodo from './NoTodo';
 import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import { func } from 'prop-types';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function App() {
-  const [todos, setTodos] = useState([
+  const [todos, setTodos] = useLocalStorage('todos', []);
+  /* const [todos, setTodos] = useState([
     {
       id: 1,
       title: 'Do task 1',
@@ -25,9 +27,13 @@ function App() {
       isComplete: false,
       isEditing: false,
     },
-  ]);
+  ]); */
 
-  const [idForTodo, setIdForTodo] = useState(todos.length + 1);
+  function getUniqueId() {
+    return new Date().getTime();
+  }
+
+  const [idForTodo, setIdForTodo] = useState(getUniqueId());
 
   function addTodo(todo) {
     setTodos([
