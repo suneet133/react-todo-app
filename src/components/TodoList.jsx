@@ -78,7 +78,7 @@ function TodoList() {
             timeout={300}
           >
             <li>
-              <div className="columns">
+              <div className="columns is-mobile">
                 <div className="column is-1">
                   <input
                     type="checkbox"
@@ -145,7 +145,7 @@ function TodoList() {
         unmountOnExit
       >
         <>
-          <div className="columns is-vcentered">
+          <div className="columns is-vcentered is-mobile">
             <div className="column" style={{ marginLeft: '2rem' }}>
               <CheckAllTodos />
             </div>
@@ -156,7 +156,7 @@ function TodoList() {
             </div>
           </div>
           <hr />
-          <div className="columns is-vcentered">
+          <div className="columns is-vcentered is-mobile">
             <div className="column">
               <FilterTodos />
             </div>

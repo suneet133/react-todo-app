@@ -47,24 +47,33 @@ function App() {
       }}
     >
       <div className="App">
-        <section className="section">
-          <div className="container">
-            <div className="box" style={{ width: 800 }}>
-              <h1 className="subtitle">Todo App</h1>
-              <hr></hr>
-              <TodoForm addTodo={addTodo} />
-              <hr></hr>
-              <div className="content">
-                <SwitchTransition mode="out-in">
-                  <CSSTransition
-                    key={todos.length > 0}
-                    timeout={300}
-                    classNames="slide-vertical"
-                    unmountOnExit
-                  >
-                    <>{todos.length > 0 ? <TodoList /> : <NoTodo />}</>
-                  </CSSTransition>
-                </SwitchTransition>
+        <section className="hero is-light is-fullheight-with-navbar">
+          <div className="hero-body">
+            <div
+              className="container"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div className="box" style={{ width: 800 }}>
+                <h1 className="subtitle has-text-info">Todo App</h1>
+                <hr></hr>
+                <TodoForm addTodo={addTodo} />
+                <hr></hr>
+                <div className="content">
+                  <SwitchTransition mode="out-in">
+                    <CSSTransition
+                      key={todos.length > 0}
+                      timeout={300}
+                      classNames="slide-vertical"
+                      unmountOnExit
+                    >
+                      <>{todos.length > 0 ? <TodoList /> : <NoTodo />}</>
+                    </CSSTransition>
+                  </SwitchTransition>
+                </div>
               </div>
             </div>
           </div>
